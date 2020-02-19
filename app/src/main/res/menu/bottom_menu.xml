@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_home_24dp"
+        android:title="Item" />
+    <item
+        android:id="@+id/action_star"
+        android:icon="@drawable/ic_star_24dp"
+        android:title="Item" />
+    <item
+        android:id="@+id/action_fav"
+        android:icon="@drawable/ic_favorite_24dp"
+        android:title="Item" />
+    <item
+        android:id="@+id/action_money"
+        android:icon="@drawable/ic_monetization_on_24dp"
+        android:title="Item" />
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_24dp"
+        android:title="Item" />
+</menu>
