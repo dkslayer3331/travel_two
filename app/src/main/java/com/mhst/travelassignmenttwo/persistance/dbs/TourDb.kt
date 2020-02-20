@@ -11,7 +11,7 @@ import com.mhst.travelassignmenttwo.persistance.daos.TourDao
 /**
  * Created by Moe Htet on 20,February,2020
  */
-@Database(entities = [BaseVO::class,CountrVO::class],version = 1)
+@Database(entities = [BaseVO::class,CountrVO::class],version = 1,exportSchema = false)
 abstract class TourDb : RoomDatabase(){
 
     abstract fun tourDao() : TourDao

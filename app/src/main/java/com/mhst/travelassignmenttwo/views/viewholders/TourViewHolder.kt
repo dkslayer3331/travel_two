@@ -4,7 +4,6 @@ import android.view.TouchDelegate
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.mhst.architectureassignment.R
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.architectureassignment.views.viewpods.FavViewPod
 import kotlinx.android.synthetic.main.rating_viewpod.view.*

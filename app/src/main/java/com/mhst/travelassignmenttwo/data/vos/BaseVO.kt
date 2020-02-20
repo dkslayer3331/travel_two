@@ -1,6 +1,7 @@
 package com.mhst.architectureassignment.data.vos
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 import com.mhst.travelassignmenttwo.persistance.typeconverters.PhotoUrlConverter
@@ -9,6 +10,8 @@ import com.mhst.travelassignmenttwo.persistance.typeconverters.ScoreAndReviewTyp
 @TypeConverters(PhotoUrlConverter::class,ScoreAndReviewTypeConverter::class)
 @Entity(tableName = "tours")
 data class BaseVO(
+    @PrimaryKey(autoGenerate = true)
+    val id : Int,
     @SerializedName("name")
     val name : String = "",
     @SerializedName("description")

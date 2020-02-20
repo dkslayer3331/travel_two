@@ -22,7 +22,7 @@ interface TourDao {
     fun insertAllTours(list : List<BaseVO>)
 
     @Query("select * from tours where name LIKE :name ")
-    fun getTourDetail(name : String)
+    fun getTourDetail(name : String) : LiveData<BaseVO>
 
     //Countries
 
@@ -33,7 +33,7 @@ interface TourDao {
     fun insertAllCountries(list : List<BaseVO>)
 
     @Query("select * from countries where name LIKE :name ")
-    fun getCountryDetail(name : String)
+    fun getCountryDetail(name : String) : LiveData<CountrVO>
 
 
 }

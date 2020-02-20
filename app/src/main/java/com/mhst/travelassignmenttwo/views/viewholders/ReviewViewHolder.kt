@@ -1,8 +1,9 @@
 package com.mhst.architectureassignment.views.viewholders
 
 import android.view.View
-import com.mhst.architectureassignment.R
+
 import com.mhst.architectureassignment.data.vos.ScoreAndReviewVO
+import com.mhst.travelassignmenttwo.R
 import kotlinx.android.synthetic.main.rv_score_and_review_item.view.*
 
 class ReviewViewHolder(itemView: View) : BaseViewHolder<ScoreAndReviewVO>(itemView) {

@@ -1,12 +1,13 @@
 package com.mhst.architectureassignment.data.models
 
+import androidx.lifecycle.LiveData
 import com.mhst.architectureassignment.data.vos.BaseVO
+import com.mhst.travelassignmenttwo.data.vos.CountrVO
+import java.util.*
 
 interface TourModel {
-    fun getAllList(onSucess : (List<BaseVO>,List<BaseVO>) -> Unit,onFail : (String) -> Unit)
-
-    fun getCountry(id : Int) : BaseVO
-
-    fun getTourDetail(id : Int) : BaseVO
-
+   fun getCountries(onError : (String) -> Unit) : LiveData<List<BaseVO>>
+    fun getTours(onError: (String) -> Unit) : LiveData<List<BaseVO>>
+    fun getCountryDetail(name : String) : LiveData<CountrVO>
+    fun tourDetail(name : String) : LiveData<BaseVO>
 }

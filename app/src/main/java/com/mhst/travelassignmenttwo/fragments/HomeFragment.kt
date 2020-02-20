@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.mhst.architectureassignment.adapters.CountryAdapter
 import com.mhst.architectureassignment.adapters.TourAdapter
@@ -33,23 +35,21 @@ class HomeFragment : Fragment() {
 
     lateinit var tourAdapter: TourAdapter
 
-    val tourModel: TourModel = TourModelImpl
+    lateinit var tourModel: TourModel
 
     private fun requestData() {
         swipeRefresh.isRefreshing = true
-        tourModel.getAllList(onSucess = { countries, tours ->
+        tourModel.getCountries {
+            Toast.makeText(context,it,Toast.LENGTH_LONG).show()
+        }.observe(this, Observer {
             swipeRefresh.isRefreshing = false
-            if(tours.isNotEmpty() && countries.isNotEmpty()){
-                hideEmptyView()
-                tourAdapter.setNewData(tours.toMutableList())
-                countryAdapter.setNewData(countries.toMutableList())
-            }
-            else showEmptyView()
+            countryAdapter.setNewData(it.toMutableList())
+        })
 
-        }, onFail = {
-            swipeRefresh.isRefreshing = false
-            view?.let { it1 -> Snackbar.make(it1, it, Snackbar.LENGTH_LONG).show() }
-            showEmptyView()
+        tourModel.getTours {
+            Toast.makeText(context,it,Toast.LENGTH_LONG).show()
+        }.observe(this, Observer {
+            tourAdapter.setNewData(it.toMutableList())
         })
     }
 
@@ -65,8 +65,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun showEmptyView(){
-//        ivEmptyImage.visibility = View.VISIBLE
-//        tvEmptyText.visibility = View.VISIBLE
         viewPodEmpty.visibility = View.VISIBLE
         viewPodEmpty.setEmptyData("Something wrong","https://cdn2.iconfinder.com/data/icons/files-and-documents-12/120/books_2f4r-512.png")
 
@@ -94,6 +92,8 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        tourModel = TourModelImpl(context!!)
 
         viewPodEmpty = vpEmpty as EmptyViewPod
 

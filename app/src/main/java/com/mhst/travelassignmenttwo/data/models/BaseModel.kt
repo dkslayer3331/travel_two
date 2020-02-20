@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 abstract class BaseModel {
 
-    private var travelApi : TravelApi? = null
+    protected var travelApi : TravelApi? = null
 
     init {
         val okHttpBuilder = OkHttpClient.Builder()

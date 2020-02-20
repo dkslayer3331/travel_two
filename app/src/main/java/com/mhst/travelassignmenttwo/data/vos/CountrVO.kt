@@ -1,6 +1,7 @@
 package com.mhst.travelassignmenttwo.data.vos
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 import com.mhst.architectureassignment.data.vos.ScoreAndReviewVO
@@ -13,6 +14,8 @@ import com.mhst.travelassignmenttwo.persistance.typeconverters.ScoreAndReviewTyp
 @TypeConverters(PhotoUrlConverter::class, ScoreAndReviewTypeConverter::class)
 @Entity(tableName = "countries")
 data class CountrVO(
+    @PrimaryKey(autoGenerate = true)
+    val id : Int,
     @SerializedName("name")
     val name : String = "",
     @SerializedName("description")
