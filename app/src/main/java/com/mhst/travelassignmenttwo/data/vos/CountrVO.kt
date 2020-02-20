@@ -1,14 +1,18 @@
-package com.mhst.architectureassignment.data.vos
+package com.mhst.travelassignmenttwo.data.vos
 
 import androidx.room.Entity
 import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
+import com.mhst.architectureassignment.data.vos.ScoreAndReviewVO
 import com.mhst.travelassignmenttwo.persistance.typeconverters.PhotoUrlConverter
 import com.mhst.travelassignmenttwo.persistance.typeconverters.ScoreAndReviewTypeConverter
 
-@TypeConverters(PhotoUrlConverter::class,ScoreAndReviewTypeConverter::class)
-@Entity(tableName = "tours")
-data class BaseVO(
+/**
+ * Created by Moe Htet on 20,February,2020
+ */
+@TypeConverters(PhotoUrlConverter::class, ScoreAndReviewTypeConverter::class)
+@Entity(tableName = "countries")
+data class CountrVO(
     @SerializedName("name")
     val name : String = "",
     @SerializedName("description")
