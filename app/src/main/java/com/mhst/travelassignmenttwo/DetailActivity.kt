@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import com.mhst.architectureassignment.adapters.PhotoAdapter
 import com.mhst.architectureassignment.adapters.ReviewAdapter
 import com.mhst.architectureassignment.data.models.TourModel
