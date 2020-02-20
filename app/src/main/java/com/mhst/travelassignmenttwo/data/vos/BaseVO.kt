@@ -11,7 +11,7 @@ import com.mhst.travelassignmenttwo.persistance.typeconverters.ScoreAndReviewTyp
 @Entity(tableName = "tours")
 data class BaseVO(
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
+    val id : Int = 0,
     @SerializedName("name")
     val name : String = "",
     @SerializedName("description")

@@ -10,4 +10,6 @@ interface TourModel {
     fun getTours(onError: (String) -> Unit) : LiveData<List<BaseVO>>
     fun getCountryDetail(name : String) : LiveData<CountrVO>
     fun tourDetail(name : String) : LiveData<BaseVO>
+
+    fun combined()
 }

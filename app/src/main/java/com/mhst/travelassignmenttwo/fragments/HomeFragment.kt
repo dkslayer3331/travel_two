@@ -40,14 +40,14 @@ class HomeFragment : Fragment() {
     private fun requestData() {
         swipeRefresh.isRefreshing = true
         tourModel.getCountries {
-            Toast.makeText(context,it,Toast.LENGTH_LONG).show()
+           if(it.isNotEmpty()) Toast.makeText(context,it,Toast.LENGTH_LONG).show()
         }.observe(this, Observer {
             swipeRefresh.isRefreshing = false
             countryAdapter.setNewData(it.toMutableList())
         })
 
         tourModel.getTours {
-            Toast.makeText(context,it,Toast.LENGTH_LONG).show()
+            if(it.isNotEmpty()) Toast.makeText(context,it,Toast.LENGTH_LONG).show()
         }.observe(this, Observer {
             tourAdapter.setNewData(it.toMutableList())
         })
