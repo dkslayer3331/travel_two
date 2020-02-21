@@ -22,7 +22,7 @@ class TourViewHolder(itemView: View,val delegate: (Int)->Unit) : BaseViewHolder<
         Glide.with(itemView.context).load(data?.photos?.get(0) ?: "").into(itemView.ivTourPhoto)
 
         itemView.setOnClickListener {
-            delegate(adapterPosition)
+            delegate(data!!.id)
         }
     }
 }

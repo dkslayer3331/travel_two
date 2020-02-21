@@ -21,8 +21,8 @@ interface TourDao {
     @Insert(entity = BaseVO::class)
     fun insertAllTours(list : List<BaseVO>)
 
-    @Query("select * from tours where name LIKE :name ")
-    fun getTourDetail(name : String) : LiveData<BaseVO>
+    @Query("select * from tours where id =:id ")
+    fun getTourDetail(id : Int) : LiveData<BaseVO>
 
     //Countries
 
@@ -32,8 +32,8 @@ interface TourDao {
     @Insert(entity = CountrVO::class)
     fun insertAllCountries(list : List<BaseVO>)
 
-    @Query("select * from countries where name LIKE :name ")
-    fun getCountryDetail(name : String) : LiveData<CountrVO>
+    @Query("select * from countries where id =:id ")
+    fun getCountryDetail(id: Int) : LiveData<CountrVO>
 
 
 }

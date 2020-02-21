@@ -24,7 +24,7 @@ class CountryViewHolder(itemView: View,val delegate : (id : Int)->Unit) : BaseVi
         vp.setValues(data?.avgRating ?: 0f,Color.parseColor("#CCFFFFFF"))
 
         itemView.setOnClickListener {
-            delegate.invoke(adapterPosition)
+            delegate.invoke(data!!.id)
         }
     }
 }

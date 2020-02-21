@@ -1,6 +1,6 @@
 package com.mhst.travelassignmenttwo
 
-const val BASE_URL = "https://9c985d89-df03-4ce1-8de3-7e104dd036d3.mock.pstmn.io"
+const val BASE_URL = "https://e1314c36-5305-4773-90b6-d3032291d1bf.mock.pstmn.io"
 
 const val NO_CONNECTION_MESSAGE = "No Internet Connection"
 

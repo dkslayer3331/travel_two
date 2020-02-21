@@ -8,8 +8,8 @@ import java.util.*
 interface TourModel {
    fun getCountries(onError : (String) -> Unit) : LiveData<List<BaseVO>>
     fun getTours(onError: (String) -> Unit) : LiveData<List<BaseVO>>
-    fun getCountryDetail(name : String) : LiveData<CountrVO>
-    fun tourDetail(name : String) : LiveData<BaseVO>
+    fun getCountryDetail(id : Int) : LiveData<CountrVO>
+    fun tourDetail(id : Int) : LiveData<BaseVO>
 
     fun combined()
 }

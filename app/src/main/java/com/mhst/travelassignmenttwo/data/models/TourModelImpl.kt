@@ -66,12 +66,12 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
 
     }
 
-    override fun getCountryDetail(name: String): LiveData<CountrVO> {
-       return db.tourDao().getCountryDetail(name)
+    override fun getCountryDetail(id: Int): LiveData<CountrVO> {
+       return db.tourDao().getCountryDetail(id)
     }
 
-    override fun tourDetail(name: String): LiveData<BaseVO> {
-        return db.tourDao().getTourDetail(name)
+    override fun tourDetail(id: Int): LiveData<BaseVO> {
+        return db.tourDao().getTourDetail(id)
     }
 
 
