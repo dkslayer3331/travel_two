@@ -20,7 +20,7 @@ class DetailActivity : AppCompatActivity() {
 
     lateinit var photoAdapter: PhotoAdapter
 
-    lateinit var tourModel : TourModel
+   lateinit var tourModel : TourModel
 
     var data = BaseVO()
 
@@ -66,18 +66,18 @@ class DetailActivity : AppCompatActivity() {
 
         tourModel = TourModelImpl(this)
 
-        val id = intent.getIntExtra(IE_ID,0)
+        val name = intent.getStringExtra(IE_NAME)
 
         val type = intent.getIntExtra(IE_TYPE,0)
 
        // data = if(type == 1) tourModel.getCountryDetail("") else model.getTourDetail(id)
        if(type == 1){
-        tourModel.getCountryDetail(id).observe(this, Observer {
+        tourModel.getCountryDetail(name).observe(this, Observer {
             bindCountry(it)
         })
        }
         else {
-           tourModel.tourDetail(id).observe(this, Observer {
+           tourModel.tourDetail(name).observe(this, Observer {
               bindTour(it)
            })
        }
@@ -97,12 +97,12 @@ class DetailActivity : AppCompatActivity() {
     }
 
     companion object{
-        private const val IE_ID = "Id"
+        private const val IE_NAME = "Name"
        private const val IE_TYPE = "Type"  // country -> 1 , tour -> 2
 
-        fun newInstance(context: Context, id : Int, type : Int) : Intent {
+        fun newInstance(context: Context, name : String, type : Int) : Intent {
             val intent = Intent(context,DetailActivity::class.java)
-            intent.putExtra(IE_ID,id)
+            intent.putExtra(IE_NAME,name)
             intent.putExtra(IE_TYPE,type)
             return intent
         }

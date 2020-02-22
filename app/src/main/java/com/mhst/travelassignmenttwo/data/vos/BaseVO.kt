@@ -10,8 +10,7 @@ import com.mhst.travelassignmenttwo.persistance.typeconverters.ScoreAndReviewTyp
 @TypeConverters(PhotoUrlConverter::class,ScoreAndReviewTypeConverter::class)
 @Entity(tableName = "tours")
 data class BaseVO(
-    @PrimaryKey(autoGenerate = true)
-    val id : Int = 0,
+    @PrimaryKey
     @SerializedName("name")
     val name : String = "",
     @SerializedName("description")

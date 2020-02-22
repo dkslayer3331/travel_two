@@ -17,6 +17,8 @@ import com.mhst.architectureassignment.data.models.TourModelImpl
 import com.mhst.architectureassignment.views.viewpods.EmptyViewPod
 import com.mhst.travelassignmenttwo.DetailActivity
 import com.mhst.travelassignmenttwo.R
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,31 +37,17 @@ class HomeFragment : Fragment() {
 
     lateinit var tourAdapter: TourAdapter
 
-    lateinit var tourModel: TourModel
+     lateinit var tourModel: TourModel
 
     private fun requestData() {
         swipeRefresh.isRefreshing = true
-        tourModel.getCountries {
-           if(it.isNotEmpty()) Toast.makeText(context,it,Toast.LENGTH_LONG).show()
-        }.observe(this, Observer {
-            swipeRefresh.isRefreshing = false
-            if(it.isEmpty()) showEmptyView()
-            else {
-                hideEmptyView()
-                countryAdapter.setNewData(it.toMutableList())
+        tourModel.combined().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                swipeRefresh.isRefreshing = false
+                tourAdapter.setNewData(it.tours.toMutableList())
+                countryAdapter.setNewData(it.countries.toMutableList())
             }
-
-        })
-
-        tourModel.getTours {
-            if(it.isNotEmpty()) Toast.makeText(context,it,Toast.LENGTH_LONG).show()
-        }.observe(this, Observer {
-            if(it.isEmpty()) showEmptyView()
-            else {
-                hideEmptyView()
-                tourAdapter.setNewData(it.toMutableList())
-            }
-        })
     }
 
     private fun setupRecyclers() {
@@ -69,6 +57,7 @@ class HomeFragment : Fragment() {
 
     private fun setupSwipeRefresh() {
         swipeRefresh.setOnRefreshListener {
+            Log.d("swipe","refreshed")
             tourModel.combined()
             requestData()
         }
@@ -112,10 +101,10 @@ class HomeFragment : Fragment() {
         requestData()
 
         countryAdapter = CountryAdapter {
-            Log.d("countryPosition", it.toString())
             val intent = context?.let { it1 -> DetailActivity.newInstance(it1, it, 1) }
             startActivity(intent)
         }
+
 
         tourAdapter = TourAdapter {
             val intent = context?.let { it1 -> DetailActivity.newInstance(it1, it, 2) }

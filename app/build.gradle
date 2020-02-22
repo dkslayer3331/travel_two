@@ -85,4 +85,6 @@ dependencies {
 
     // Annotation processor
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
 }

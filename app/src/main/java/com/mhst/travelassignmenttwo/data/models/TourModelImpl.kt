@@ -3,10 +3,13 @@ package com.mhst.architectureassignment.data.models
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.architectureassignment.network.responses.ResponseVO
 import com.mhst.travelassignmenttwo.NO_CONNECTION_MESSAGE
+import com.mhst.travelassignmenttwo.TourApp
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
+import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
 import com.mhst.travelassignmenttwo.persistance.dbs.TourDb
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,39 +24,42 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
         combined()
     }
 
-    override fun combined() {
-       Observable.zip(travelApi!!.getAllTours(),travelApi!!.getAllCountries(),
-           BiFunction { tours : ResponseVO, countries : ResponseVO ->
+    var list = MutableLiveData<TourAndCountryVO>()
+
+    override fun combined() : Observable<TourAndCountryVO> {
+        Log.d("combine","combine is called")
+     return Observable.zip(travelApi!!.getAllTours(),travelApi!!.getAllCountries(),
+           BiFunction<ResponseVO,ResponseVO,TourAndCountryVO>{ tours : ResponseVO, countries : ResponseVO ->
+               db.tourDao().deleteAllCountries()
+               db.tourDao().deleteAllTours()
                db.tourDao().insertAllTours(tours.data)
                db.tourDao().insertAllCountries(countries.data)
+               val countries = db.tourDao().getAllTCountries()
+               val tours = db.tourDao().getAllTours()
+               return@BiFunction TourAndCountryVO(countries,tours)
            }).subscribeOn(Schedulers.io())
            .observeOn(AndroidSchedulers.mainThread())
-           .onErrorReturn {
-               Log.d("netError",it.localizedMessage)
-               errorMessage = it.localizedMessage ?: NO_CONNECTION_MESSAGE
-           }
     }
 
     private val db = TourDb.getInstance(context)
 
-    override fun getCountries(onError: (String) -> Unit): LiveData<List<BaseVO>> {
+    override fun getCountries(onError: (String) -> Unit): List<BaseVO> {
         onError(errorMessage)
         return db.tourDao().getAllTCountries()
 
     }
 
-    override fun getTours(onError: (String) -> Unit): LiveData<List<BaseVO>> {
+    override fun getTours(onError: (String) -> Unit): List<BaseVO> {
         onError(errorMessage)
         return db.tourDao().getAllTours()
-
     }
 
-    override fun getCountryDetail(id: Int): LiveData<CountrVO> {
-       return db.tourDao().getCountryDetail(id)
+    override fun getCountryDetail(name: String): LiveData<CountrVO> {
+       return db.tourDao().getCountryDetail(name)
     }
 
-    override fun tourDetail(id: Int): LiveData<BaseVO> {
-        return db.tourDao().getTourDetail(id)
+    override fun tourDetail(name: String): LiveData<BaseVO> {
+        return db.tourDao().getTourDetail(name)
     }
 
 

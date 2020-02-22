@@ -9,7 +9,7 @@ import com.mhst.architectureassignment.views.viewpods.FavViewPod
 import kotlinx.android.synthetic.main.rating_viewpod.view.*
 import kotlinx.android.synthetic.main.rv_tour_item.view.*
 
-class TourViewHolder(itemView: View,val delegate: (Int)->Unit) : BaseViewHolder<BaseVO>(itemView) {
+class TourViewHolder(itemView: View,val delegate: (String)->Unit) : BaseViewHolder<BaseVO>(itemView) {
     override fun binData(data: BaseVO?) {
 
         val vpScore = itemView.vpScore as FavViewPod
@@ -22,7 +22,7 @@ class TourViewHolder(itemView: View,val delegate: (Int)->Unit) : BaseViewHolder<
         Glide.with(itemView.context).load(data?.photos?.get(0) ?: "").into(itemView.ivTourPhoto)
 
         itemView.setOnClickListener {
-            delegate(data!!.id)
+            delegate(data!!.name)
         }
     }
 }

@@ -17,24 +17,27 @@ interface TourDao {
     //tours
 
     @Query("select * from tours ")
-    fun getAllTours() : LiveData<List<BaseVO>>
+    fun getAllTours() : List<BaseVO>
 
     @Insert(entity = BaseVO::class,onConflict = OnConflictStrategy.REPLACE)
     fun insertAllTours(list : List<BaseVO>)
 
-    @Query("select * from tours where id =:id ")
-    fun getTourDetail(id : Int) : LiveData<BaseVO>
+    @Query("select * from tours where name =:name ")
+    fun getTourDetail(name: String) : LiveData<BaseVO>
 
+    @Query("delete from tours")
+    fun deleteAllTours()
     //Countries
 
     @Query("select * from countries ")
-    fun getAllTCountries() : LiveData<List<BaseVO>>
+    fun getAllTCountries() : List<BaseVO>
 
-    @Insert(entity = CountrVO::class,onConflict = OnConflictStrategy.REPLACE)
+    @Insert(entity = CountrVO::class)
     fun insertAllCountries(list : List<BaseVO>)
 
-    @Query("select * from countries where id =:id ")
-    fun getCountryDetail(id: Int) : LiveData<CountrVO>
+    @Query("select * from countries where name =:name")
+    fun getCountryDetail(name: String) : LiveData<CountrVO>
 
-
+    @Query("delete from countries")
+    fun deleteAllCountries()
 }

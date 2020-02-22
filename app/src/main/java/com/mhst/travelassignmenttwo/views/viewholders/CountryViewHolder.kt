@@ -9,7 +9,7 @@ import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.architectureassignment.views.viewpods.FavViewPod
 import kotlinx.android.synthetic.main.rv_country_item.view.*
 
-class CountryViewHolder(itemView: View,val delegate : (id : Int)->Unit) : BaseViewHolder<BaseVO>(itemView) {
+class CountryViewHolder(itemView: View,val delegate : (name : String)->Unit) : BaseViewHolder<BaseVO>(itemView) {
 
     override fun binData(data: BaseVO?) {
 
@@ -24,7 +24,7 @@ class CountryViewHolder(itemView: View,val delegate : (id : Int)->Unit) : BaseVi
         vp.setValues(data?.avgRating ?: 0f,Color.parseColor("#CCFFFFFF"))
 
         itemView.setOnClickListener {
-            delegate.invoke(data!!.id)
+            delegate.invoke(data!!.name)
         }
     }
 }
