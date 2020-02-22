@@ -43,13 +43,22 @@ class HomeFragment : Fragment() {
            if(it.isNotEmpty()) Toast.makeText(context,it,Toast.LENGTH_LONG).show()
         }.observe(this, Observer {
             swipeRefresh.isRefreshing = false
-            countryAdapter.setNewData(it.toMutableList())
+            if(it.isEmpty()) showEmptyView()
+            else {
+                hideEmptyView()
+                countryAdapter.setNewData(it.toMutableList())
+            }
+
         })
 
         tourModel.getTours {
             if(it.isNotEmpty()) Toast.makeText(context,it,Toast.LENGTH_LONG).show()
         }.observe(this, Observer {
-            tourAdapter.setNewData(it.toMutableList())
+            if(it.isEmpty()) showEmptyView()
+            else {
+                hideEmptyView()
+                tourAdapter.setNewData(it.toMutableList())
+            }
         })
     }
 
@@ -60,6 +69,7 @@ class HomeFragment : Fragment() {
 
     private fun setupSwipeRefresh() {
         swipeRefresh.setOnRefreshListener {
+            tourModel.combined()
             requestData()
         }
     }

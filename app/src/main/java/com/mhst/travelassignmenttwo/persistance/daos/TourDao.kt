@@ -3,6 +3,7 @@ package com.mhst.travelassignmenttwo.persistance.daos
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
@@ -18,7 +19,7 @@ interface TourDao {
     @Query("select * from tours ")
     fun getAllTours() : LiveData<List<BaseVO>>
 
-    @Insert(entity = BaseVO::class)
+    @Insert(entity = BaseVO::class,onConflict = OnConflictStrategy.REPLACE)
     fun insertAllTours(list : List<BaseVO>)
 
     @Query("select * from tours where id =:id ")
@@ -29,7 +30,7 @@ interface TourDao {
     @Query("select * from countries ")
     fun getAllTCountries() : LiveData<List<BaseVO>>
 
-    @Insert(entity = CountrVO::class)
+    @Insert(entity = CountrVO::class,onConflict = OnConflictStrategy.REPLACE)
     fun insertAllCountries(list : List<BaseVO>)
 
     @Query("select * from countries where id =:id ")
