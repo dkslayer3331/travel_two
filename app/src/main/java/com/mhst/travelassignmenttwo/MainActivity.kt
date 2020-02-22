@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mhst.architectureassignment.fragments.HomeFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private fun replaceFragment() {
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer,

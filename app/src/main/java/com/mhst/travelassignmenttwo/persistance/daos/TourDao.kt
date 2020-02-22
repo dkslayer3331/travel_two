@@ -27,17 +27,5 @@ interface TourDao {
 
     @Query("delete from tours")
     fun deleteAllTours()
-    //Countries
 
-    @Query("select * from countries ")
-    fun getAllTCountries() : List<BaseVO>
-
-    @Insert(entity = CountrVO::class)
-    fun insertAllCountries(list : List<BaseVO>)
-
-    @Query("select * from countries where name =:name")
-    fun getCountryDetail(name: String) : LiveData<CountrVO>
-
-    @Query("delete from countries")
-    fun deleteAllCountries()
 }

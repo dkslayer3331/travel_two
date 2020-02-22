@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
+import com.mhst.travelassignmenttwo.persistance.daos.CoyntryDao
 import com.mhst.travelassignmenttwo.persistance.daos.TourDao
 import com.mhst.travelassignmenttwo.persistance.typeconverters.PhotoUrlConverter
 import com.mhst.travelassignmenttwo.persistance.typeconverters.ScoreAndReviewTypeConverter
@@ -19,6 +20,8 @@ import com.mhst.travelassignmenttwo.persistance.typeconverters.ScoreAndReviewTyp
 abstract class TourDb : RoomDatabase(){
 
     abstract fun tourDao() : TourDao
+
+    abstract fun countryDao() : CoyntryDao
 
     companion object{
         val DB_NAME = "TOURS_AND_COUNTRIES.DB"

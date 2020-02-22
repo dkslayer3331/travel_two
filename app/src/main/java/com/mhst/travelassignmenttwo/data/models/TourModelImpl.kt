@@ -20,21 +20,18 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
 
     var errorMessage = ""
 
-    init {
-        combined()
-    }
-
     var list = MutableLiveData<TourAndCountryVO>()
 
-    override fun combined() : Observable<TourAndCountryVO> {
+    override fun combined(): Observable<TourAndCountryVO> {
         Log.d("combine","combine is called")
      return Observable.zip(travelApi!!.getAllTours(),travelApi!!.getAllCountries(),
            BiFunction<ResponseVO,ResponseVO,TourAndCountryVO>{ tours : ResponseVO, countries : ResponseVO ->
-               db.tourDao().deleteAllCountries()
+             //  if(!tours.isSuccessful() && !tours.isSuccessful()) error("Something went wrong")
+               db.countryDao().deleteAllCountries()
                db.tourDao().deleteAllTours()
                db.tourDao().insertAllTours(tours.data)
-               db.tourDao().insertAllCountries(countries.data)
-               val countries = db.tourDao().getAllTCountries()
+               db.countryDao().insertAllCountries(countries.data)
+               val countries = db.countryDao().getAllTCountries()
                val tours = db.tourDao().getAllTours()
                return@BiFunction TourAndCountryVO(countries,tours)
            }).subscribeOn(Schedulers.io())
@@ -45,7 +42,7 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
 
     override fun getCountries(onError: (String) -> Unit): List<BaseVO> {
         onError(errorMessage)
-        return db.tourDao().getAllTCountries()
+        return db.countryDao().getAllTCountries()
 
     }
 
@@ -55,7 +52,7 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
     }
 
     override fun getCountryDetail(name: String): LiveData<CountrVO> {
-       return db.tourDao().getCountryDetail(name)
+       return db.countryDao().getCountryDetail(name)
     }
 
     override fun tourDetail(name: String): LiveData<BaseVO> {

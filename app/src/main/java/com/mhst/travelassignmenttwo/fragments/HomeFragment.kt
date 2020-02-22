@@ -16,6 +16,7 @@ import com.mhst.architectureassignment.data.models.TourModel
 import com.mhst.architectureassignment.data.models.TourModelImpl
 import com.mhst.architectureassignment.views.viewpods.EmptyViewPod
 import com.mhst.travelassignmenttwo.DetailActivity
+import com.mhst.travelassignmenttwo.MainActivity
 import com.mhst.travelassignmenttwo.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -43,11 +44,14 @@ class HomeFragment : Fragment() {
         swipeRefresh.isRefreshing = true
         tourModel.combined().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .subscribe({
                 swipeRefresh.isRefreshing = false
                 tourAdapter.setNewData(it.tours.toMutableList())
                 countryAdapter.setNewData(it.countries.toMutableList())
-            }
+            },{
+                swipeRefresh.isRefreshing = false
+                (activity as MainActivity).showSnackBar(it.localizedMessage)
+            })
     }
 
     private fun setupRecyclers() {
@@ -58,7 +62,6 @@ class HomeFragment : Fragment() {
     private fun setupSwipeRefresh() {
         swipeRefresh.setOnRefreshListener {
             Log.d("swipe","refreshed")
-            tourModel.combined()
             requestData()
         }
     }

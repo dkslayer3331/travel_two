@@ -14,7 +14,7 @@ import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
 import kotlinx.android.synthetic.main.activity_detail.*
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : BaseActivity() {
 
     lateinit var scoreAndReviewAdapter: ReviewAdapter
 
