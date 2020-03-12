@@ -12,9 +12,10 @@ import com.mhst.architectureassignment.data.models.TourModel
 import com.mhst.architectureassignment.data.models.TourModelImpl
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
+import com.mhst.travelassignmenttwo.mvp.views.DetailView
 import kotlinx.android.synthetic.main.activity_detail.*
 
-class DetailActivity : BaseActivity() {
+class DetailActivity : BaseActivity(),DetailView {
 
     lateinit var scoreAndReviewAdapter: ReviewAdapter
 
@@ -106,6 +107,10 @@ class DetailActivity : BaseActivity() {
             intent.putExtra(IE_TYPE,type)
             return intent
         }
+
+    }
+
+    override fun showDetail(detailObj: BaseVO) {
 
     }
 

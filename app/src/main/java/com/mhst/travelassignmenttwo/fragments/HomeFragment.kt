@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.mhst.architectureassignment.adapters.CountryAdapter
 import com.mhst.architectureassignment.adapters.TourAdapter
@@ -18,6 +19,10 @@ import com.mhst.architectureassignment.views.viewpods.EmptyViewPod
 import com.mhst.travelassignmenttwo.DetailActivity
 import com.mhst.travelassignmenttwo.MainActivity
 import com.mhst.travelassignmenttwo.R
+import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
+import com.mhst.travelassignmenttwo.mvp.presenters.MainPresenter
+import com.mhst.travelassignmenttwo.mvp.presenters.MainPresenterImpl
+import com.mhst.travelassignmenttwo.mvp.views.MainView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -27,10 +32,12 @@ import kotlinx.android.synthetic.main.fragment_home.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment() , MainView{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    lateinit var presenter : MainPresenter
 
     lateinit var viewPodEmpty : EmptyViewPod
 
@@ -40,20 +47,6 @@ class HomeFragment : Fragment() {
 
      lateinit var tourModel: TourModel
 
-    private fun requestData() {
-        swipeRefresh.isRefreshing = true
-        tourModel.combined().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                swipeRefresh.isRefreshing = false
-                tourAdapter.setNewData(it.tours.toMutableList())
-                countryAdapter.setNewData(it.countries.toMutableList())
-            },{
-                swipeRefresh.isRefreshing = false
-                (activity as MainActivity).showSnackBar(it.localizedMessage)
-            })
-    }
-
     private fun setupRecyclers() {
         rvTours.adapter = tourAdapter
         rvCountry.adapter = countryAdapter
@@ -62,7 +55,7 @@ class HomeFragment : Fragment() {
     private fun setupSwipeRefresh() {
         swipeRefresh.setOnRefreshListener {
             Log.d("swipe","refreshed")
-            requestData()
+            presenter.onSwipeRrfresh(this)
         }
     }
 
@@ -78,6 +71,7 @@ class HomeFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -95,13 +89,15 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        presenter = ViewModelProviders.of(activity!!).get(MainPresenterImpl::class.java)
+
+        presenter.initPresenter(this)
+
         tourModel = TourModelImpl(context!!)
 
         viewPodEmpty = vpEmpty as EmptyViewPod
 
         setupSwipeRefresh()
-
-        requestData()
 
         countryAdapter = CountryAdapter {
             val intent = context?.let { it1 -> DetailActivity.newInstance(it1, it, 1) }
@@ -137,5 +133,33 @@ class HomeFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun showLoading() {
+        swipeRefresh.isRefreshing = true
+    }
+
+    override fun hideLoading() {
+        swipeRefresh.isRefreshing = false
+    }
+
+    override fun navigateToDetail(name: String, type: Int) {
+
+    }
+
+    override fun showLists(list: TourAndCountryVO) {
+        hideEmptyView()
+        tourAdapter.setNewData(list.tours.toMutableList())
+        countryAdapter.setNewData(list.countries.toMutableList())
+    }
+
+    override fun showErrorMessage(message: String) {
+        view?.let {
+            Snackbar.make(it,message,Snackbar.LENGTH_LONG).show()
+        }
+    }
+
+    override fun displayEmptyView() {
+       showEmptyView()
     }
 }
