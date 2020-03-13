@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.mhst.architectureassignment.adapters.CountryAdapter
 import com.mhst.architectureassignment.adapters.TourAdapter
@@ -18,6 +19,7 @@ import com.mhst.architectureassignment.views.viewpods.EmptyViewPod
 import com.mhst.travelassignmenttwo.DetailActivity
 import com.mhst.travelassignmenttwo.MainActivity
 import com.mhst.travelassignmenttwo.R
+import com.mhst.travelassignmenttwo.viewmodels.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -32,6 +34,8 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    lateinit var viewmodel : MainViewModel
+
     lateinit var viewPodEmpty : EmptyViewPod
 
     lateinit var countryAdapter: CountryAdapter
@@ -39,20 +43,6 @@ class HomeFragment : Fragment() {
     lateinit var tourAdapter: TourAdapter
 
      lateinit var tourModel: TourModel
-
-    private fun requestData() {
-        swipeRefresh.isRefreshing = true
-        tourModel.combined().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                swipeRefresh.isRefreshing = false
-                tourAdapter.setNewData(it.tours.toMutableList())
-                countryAdapter.setNewData(it.countries.toMutableList())
-            },{
-                swipeRefresh.isRefreshing = false
-                (activity as MainActivity).showSnackBar(it.localizedMessage)
-            })
-    }
 
     private fun setupRecyclers() {
         rvTours.adapter = tourAdapter
@@ -62,20 +52,18 @@ class HomeFragment : Fragment() {
     private fun setupSwipeRefresh() {
         swipeRefresh.setOnRefreshListener {
             Log.d("swipe","refreshed")
-            requestData()
+            viewmodel.onSwipeRefresh()
         }
     }
 
     private fun showEmptyView(){
         viewPodEmpty.visibility = View.VISIBLE
         viewPodEmpty.setEmptyData("Something wrong","https://cdn2.iconfinder.com/data/icons/files-and-documents-12/120/books_2f4r-512.png")
-
     }
 
     private fun hideEmptyView(){
         viewPodEmpty.visibility = View.GONE
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,26 +83,40 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        setupRecyclers()
+
+        viewmodel = ViewModelProviders.of(this)[MainViewModel::class.java]
+
+        viewmodel.getNavigateToNewsDetailsLiveData().observe(this, Observer {
+            startActivity(DetailActivity.newInstance(view.context,it.first,it.second))
+        })
+
+        viewmodel.getErrorLiveData().observe(this, Observer {
+                Snackbar.make(view,it,Snackbar.LENGTH_SHORT).show()
+        })
+
+        viewmodel.getDisableSwipeRefreshLiveData().observe(this, Observer {
+            swipeRefresh.isRefreshing = false
+        })
+
+        viewmodel.getEnableSwipeRefreshLiveData().observe(this, Observer {
+            swipeRefresh.isRefreshing = true
+        })
+
         tourModel = TourModelImpl(context!!)
 
         viewPodEmpty = vpEmpty as EmptyViewPod
 
         setupSwipeRefresh()
 
-        requestData()
+        countryAdapter = CountryAdapter(viewmodel)
 
-        countryAdapter = CountryAdapter {
-            val intent = context?.let { it1 -> DetailActivity.newInstance(it1, it, 1) }
-            startActivity(intent)
+        tourAdapter = TourAdapter(viewmodel)
+
+        viewmodel.getCombinedList().subscribe {
+            countryAdapter.setNewData(it.countries.toMutableList())
+            tourAdapter.setNewData(it.tours.toMutableList())
         }
-
-
-        tourAdapter = TourAdapter {
-            val intent = context?.let { it1 -> DetailActivity.newInstance(it1, it, 2) }
-            startActivity(intent)
-        }
-
-        setupRecyclers()
 
     }
 
