@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.mhst.architectureassignment.adapters.PhotoAdapter
 import com.mhst.architectureassignment.adapters.ReviewAdapter
@@ -12,6 +13,7 @@ import com.mhst.architectureassignment.data.models.TourModel
 import com.mhst.architectureassignment.data.models.TourModelImpl
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
+import com.mhst.travelassignmenttwo.viewmodels.DetailViewModel
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : BaseActivity() {
@@ -21,6 +23,8 @@ class DetailActivity : BaseActivity() {
     lateinit var photoAdapter: PhotoAdapter
 
    lateinit var tourModel : TourModel
+
+    lateinit var viewmodel: DetailViewModel
 
     var data = BaseVO()
 
@@ -64,7 +68,7 @@ class DetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        tourModel = TourModelImpl(this)
+        viewmodel = ViewModelProviders.of(this)[DetailViewModel::class.java]
 
         val name = intent.getStringExtra(IE_NAME)
 
@@ -72,12 +76,12 @@ class DetailActivity : BaseActivity() {
 
        // data = if(type == 1) tourModel.getCountryDetail("") else model.getTourDetail(id)
        if(type == 1){
-        tourModel.getCountryDetail(name).observe(this, Observer {
+        viewmodel.getCountryLiveData(name).observe(this, Observer {
             bindCountry(it)
         })
        }
         else {
-           tourModel.tourDetail(name).observe(this, Observer {
+           viewmodel.getTourDetail(name).observe(this, Observer {
               bindTour(it)
            })
        }
