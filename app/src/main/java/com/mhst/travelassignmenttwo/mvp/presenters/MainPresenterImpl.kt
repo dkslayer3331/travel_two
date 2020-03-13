@@ -23,6 +23,10 @@ class MainPresenterImpl : MainPresenter, AbstractBasePresenter<MainView>() {
         requestAllData(lifecycleOwner)
     }
 
+    override fun onTap(name: String, type: Int) {
+            mView?.navigateDetail(name,type)
+    }
+
     private fun requestAllData(lifecycleOwner: LifecycleOwner) {
         mView?.showLoading()
         model.combined()

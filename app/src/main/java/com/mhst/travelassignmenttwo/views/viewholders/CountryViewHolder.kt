@@ -1,15 +1,15 @@
-package com.mhst.architectureassignment.views.viewholders
+package com.mhst.travelassignmenttwo.views.viewholders
 
 import android.graphics.Color
-import android.os.Build
 import android.view.View
-import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.mhst.architectureassignment.data.vos.BaseVO
+import com.mhst.architectureassignment.views.viewholders.BaseViewHolder
 import com.mhst.architectureassignment.views.viewpods.FavViewPod
+import com.mhst.travelassignmenttwo.delegates.TourDelegate
 import kotlinx.android.synthetic.main.rv_country_item.view.*
 
-class CountryViewHolder(itemView: View,val delegate : (name : String)->Unit) : BaseViewHolder<BaseVO>(itemView) {
+class CountryViewHolder(itemView: View,val delegate: TourDelegate) : BaseViewHolder<BaseVO>(itemView) {
 
     override fun binData(data: BaseVO?) {
 
@@ -24,7 +24,7 @@ class CountryViewHolder(itemView: View,val delegate : (name : String)->Unit) : B
         vp.setValues(data?.avgRating ?: 0f,Color.parseColor("#CCFFFFFF"))
 
         itemView.setOnClickListener {
-            delegate.invoke(data!!.name)
+            delegate.onTap(data!!.name,1)  //todo : change this
         }
     }
 }

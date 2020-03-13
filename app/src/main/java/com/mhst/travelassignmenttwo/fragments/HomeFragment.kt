@@ -99,16 +99,9 @@ class HomeFragment : Fragment() , MainView{
 
         setupSwipeRefresh()
 
-        countryAdapter = CountryAdapter {
-            val intent = context?.let { it1 -> DetailActivity.newInstance(it1, it, 1) }
-            startActivity(intent)
-        }
+        countryAdapter = CountryAdapter(presenter)
 
-
-        tourAdapter = TourAdapter {
-            val intent = context?.let { it1 -> DetailActivity.newInstance(it1, it, 2) }
-            startActivity(intent)
-        }
+        tourAdapter = TourAdapter(presenter)
 
         setupRecyclers()
 
@@ -143,9 +136,6 @@ class HomeFragment : Fragment() , MainView{
         swipeRefresh.isRefreshing = false
     }
 
-    override fun navigateToDetail(name: String, type: Int) {
-
-    }
 
     override fun showLists(list: TourAndCountryVO) {
         hideEmptyView()
@@ -161,5 +151,11 @@ class HomeFragment : Fragment() , MainView{
 
     override fun displayEmptyView() {
        showEmptyView()
+    }
+
+    override fun navigateDetail(name: String, type: Int) {
+            context?.let {
+                startActivity(DetailActivity.newInstance(it,name,type))
+            }
     }
 }

@@ -8,8 +8,8 @@ import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
 interface MainView : BaseView {
     fun showLoading()
     fun hideLoading()
-    fun navigateToDetail(name : String,type : Int)
     fun showLists(list : TourAndCountryVO)
     fun showErrorMessage(message : String)
     fun displayEmptyView()
+    fun navigateDetail(name : String,type : Int)
 }
