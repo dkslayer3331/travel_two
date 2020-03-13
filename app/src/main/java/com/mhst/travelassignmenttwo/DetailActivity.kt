@@ -2,16 +2,19 @@ package com.mhst.travelassignmenttwo
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.view.menu.MenuPresenter
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.mhst.architectureassignment.adapters.PhotoAdapter
 import com.mhst.architectureassignment.adapters.ReviewAdapter
 import com.mhst.architectureassignment.data.models.TourModel
-import com.mhst.architectureassignment.data.models.TourModelImpl
+import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
+import com.mhst.travelassignmenttwo.mvp.presenters.DetailPresenter
+import com.mhst.travelassignmenttwo.mvp.presenters.DetailPresenterImpl
 import com.mhst.travelassignmenttwo.mvp.views.DetailView
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -21,11 +24,16 @@ class DetailActivity : BaseActivity(),DetailView {
 
     lateinit var photoAdapter: PhotoAdapter
 
-   lateinit var tourModel : TourModel
+    lateinit var presenter: DetailPresenter
 
     var data = BaseVO()
 
-    fun bindCountry(data : CountrVO){
+    private fun setupPresenter(){
+        presenter = ViewModelProviders.of(this).get(DetailPresenterImpl::class.java)
+        presenter.initPresenter(this)
+    }
+
+    private fun bindCountry(data : CountrVO){
         tvTourHeading.text = data.name
 
         tvLocationName.text = data.location
@@ -43,7 +51,7 @@ class DetailActivity : BaseActivity(),DetailView {
         photoAdapter.setNewData(data.photos.toMutableList())
     }
 
-    fun bindTour(data : BaseVO){
+    private fun bindTour(data : BaseVO){
         tvTourHeading.text = data.name
 
         tvLocationName.text = data.location
@@ -65,23 +73,25 @@ class DetailActivity : BaseActivity(),DetailView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        tourModel = TourModelImpl(this)
+        setupPresenter()
 
         val name = intent.getStringExtra(IE_NAME)
 
         val type = intent.getIntExtra(IE_TYPE,0)
 
+        presenter.onUiReady(this,name,type)
+
        // data = if(type == 1) tourModel.getCountryDetail("") else model.getTourDetail(id)
-       if(type == 1){
-        tourModel.getCountryDetail(name).observe(this, Observer {
-            bindCountry(it)
-        })
-       }
-        else {
-           tourModel.tourDetail(name).observe(this, Observer {
-              bindTour(it)
-           })
-       }
+//       if(type == 1){
+//        tourModel.getCountryDetail(name).observe(this, Observer {
+//            bindCountry(it)
+//        })
+//       }
+//        else {
+//           tourModel.tourDetail(name).observe(this, Observer {
+//              bindTour(it)
+//           })
+//       }
 
         setUpRecycler()
 
@@ -110,8 +120,20 @@ class DetailActivity : BaseActivity(),DetailView {
 
     }
 
-    override fun showDetail(detailObj: BaseVO) {
+    override fun showLoading() {
+        swipeRefreshLayout.isRefreshing = true
+    }
 
+    override fun hideLoading() {
+        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun showDetail(detailObj: BaseVO) {
+        bindTour(detailObj)
+    }
+
+    override fun countryDetail(detailObj: CountrVO) {
+        bindCountry(detailObj)
     }
 
 

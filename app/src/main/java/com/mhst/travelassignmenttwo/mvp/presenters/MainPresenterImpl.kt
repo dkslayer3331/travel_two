@@ -2,7 +2,7 @@ package com.mhst.travelassignmenttwo.mvp.presenters
 
 import androidx.lifecycle.LifecycleOwner
 import com.mhst.architectureassignment.data.models.TourModel
-import com.mhst.architectureassignment.data.models.TourModelImpl
+import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.travelassignmenttwo.TourApp
 import com.mhst.travelassignmenttwo.mvp.views.MainView
 import io.reactivex.android.schedulers.AndroidSchedulers

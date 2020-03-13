@@ -2,7 +2,6 @@ package com.mhst.travelassignmenttwo
 
 import android.app.Application
 import android.content.Context
-import com.mhst.architectureassignment.data.models.TourModelImpl
 
 /**
  * Created by Moe Htet on 22,February,2020
