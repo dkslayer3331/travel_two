@@ -1,4 +1,4 @@
-package com.mhst.architectureassignment.data.models
+package com.mhst.travelassignmenttwo.data.models
 
 import androidx.lifecycle.LiveData
 import com.mhst.architectureassignment.data.vos.BaseVO
@@ -8,10 +8,8 @@ import io.reactivex.Observable
 import java.util.*
 
 interface TourModel {
-   fun getCountries(onError : (String) -> Unit) : List<BaseVO>
-    fun getTours(onError: (String) -> Unit) : List<BaseVO>
     fun getCountryDetail(name : String) : LiveData<CountrVO>
     fun tourDetail(name : String) : LiveData<BaseVO>
-
-    fun combined() : Observable<TourAndCountryVO>
+    fun getToursAndCountries() : LiveData<TourAndCountryVO>
+    fun getFromApiAndSaveLocal(onSuccess : ()-> Unit,onError: (String) -> Unit)
 }

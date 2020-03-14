@@ -7,16 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.mhst.architectureassignment.adapters.CountryAdapter
 import com.mhst.architectureassignment.adapters.TourAdapter
-import com.mhst.architectureassignment.data.models.TourModel
-import com.mhst.architectureassignment.data.models.TourModelImpl
+import com.mhst.travelassignmenttwo.data.models.TourModel
+import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.architectureassignment.views.viewpods.EmptyViewPod
-import com.mhst.travelassignmenttwo.DetailActivity
-import com.mhst.travelassignmenttwo.MainActivity
+import com.mhst.travelassignmenttwo.activities.DetailActivity
+import com.mhst.travelassignmenttwo.activities.MainActivity
 import com.mhst.travelassignmenttwo.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -42,16 +39,6 @@ class HomeFragment : Fragment() {
 
     private fun requestData() {
         swipeRefresh.isRefreshing = true
-        tourModel.combined().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                swipeRefresh.isRefreshing = false
-                tourAdapter.setNewData(it.tours.toMutableList())
-                countryAdapter.setNewData(it.countries.toMutableList())
-            },{
-                swipeRefresh.isRefreshing = false
-                (activity as MainActivity).showSnackBar(it.localizedMessage)
-            })
     }
 
     private fun setupRecyclers() {

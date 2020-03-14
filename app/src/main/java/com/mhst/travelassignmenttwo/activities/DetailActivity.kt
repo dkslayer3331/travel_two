@@ -1,16 +1,16 @@
-package com.mhst.travelassignmenttwo
+package com.mhst.travelassignmenttwo.activities
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.mhst.architectureassignment.adapters.PhotoAdapter
 import com.mhst.architectureassignment.adapters.ReviewAdapter
-import com.mhst.architectureassignment.data.models.TourModel
-import com.mhst.architectureassignment.data.models.TourModelImpl
+import com.mhst.travelassignmenttwo.data.models.TourModel
+import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.architectureassignment.data.vos.BaseVO
+import com.mhst.travelassignmenttwo.R
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -101,7 +101,8 @@ class DetailActivity : BaseActivity() {
        private const val IE_TYPE = "Type"  // country -> 1 , tour -> 2
 
         fun newInstance(context: Context, name : String, type : Int) : Intent {
-            val intent = Intent(context,DetailActivity::class.java)
+            val intent = Intent(context,
+                DetailActivity::class.java)
             intent.putExtra(IE_NAME,name)
             intent.putExtra(IE_TYPE,type)
             return intent

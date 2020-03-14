@@ -1,4 +1,4 @@
-package com.mhst.travelassignmenttwo
+package com.mhst.travelassignmenttwo.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar

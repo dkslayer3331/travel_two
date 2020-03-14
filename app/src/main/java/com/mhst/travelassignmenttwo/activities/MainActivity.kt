@@ -1,13 +1,14 @@
-package com.mhst.travelassignmenttwo
+package com.mhst.travelassignmenttwo.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mhst.architectureassignment.fragments.HomeFragment
+import com.mhst.travelassignmenttwo.R
 
 class MainActivity : BaseActivity() {
 
     private fun replaceFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer,
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragmentContainer,
             HomeFragment.newInstance("","")).commit()
     }
 

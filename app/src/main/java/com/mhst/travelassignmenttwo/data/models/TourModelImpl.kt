@@ -1,16 +1,16 @@
-package com.mhst.architectureassignment.data.models
+package com.mhst.travelassignmenttwo.data.models
 
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveDataReactiveStreams.fromPublisher
+import com.mhst.architectureassignment.data.models.BaseModel
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.architectureassignment.network.responses.ResponseVO
-import com.mhst.travelassignmenttwo.NO_CONNECTION_MESSAGE
-import com.mhst.travelassignmenttwo.TourApp
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
 import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
 import com.mhst.travelassignmenttwo.persistance.dbs.TourDb
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
@@ -20,36 +20,26 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
 
     var errorMessage = ""
 
-    var list = MutableLiveData<TourAndCountryVO>()
+    //one time with work manager
 
-    override fun combined(): Observable<TourAndCountryVO> {
+    override fun getFromApiAndSaveLocal(onSuccess: () -> Unit, onError: (String) -> Unit) {
         Log.d("combine","combine is called")
-     return Observable.zip(travelApi!!.getAllTours(),travelApi!!.getAllCountries(),
+      Observable.zip(travelApi!!.getAllTours(),travelApi!!.getAllCountries(),
            BiFunction<ResponseVO,ResponseVO,TourAndCountryVO>{ tours : ResponseVO, countries : ResponseVO ->
-             //  if(!tours.isSuccessful() && !tours.isSuccessful()) error("Something went wrong")
-               db.countryDao().deleteAllCountries()
-               db.tourDao().deleteAllTours()
-               db.tourDao().insertAllTours(tours.data)
-               db.countryDao().insertAllCountries(countries.data)
-               val countries = db.countryDao().getAllTCountries()
-               val tours = db.tourDao().getAllTours()
-               return@BiFunction TourAndCountryVO(countries,tours)
+               return@BiFunction TourAndCountryVO(countries.data,tours.data)
            }).subscribeOn(Schedulers.io())
            .observeOn(AndroidSchedulers.mainThread())
+          .subscribe({
+              db.countryDao().deleteAllCountries()
+              db.tourDao().deleteAllTours()
+              db.tourDao().insertAllTours(it.tours)
+              db.countryDao().insertAllCountries(it.countries)
+          },{
+                onError(it.localizedMessage)
+          })
     }
 
     private val db = TourDb.getInstance(context)
-
-    override fun getCountries(onError: (String) -> Unit): List<BaseVO> {
-        onError(errorMessage)
-        return db.countryDao().getAllTCountries()
-
-    }
-
-    override fun getTours(onError: (String) -> Unit): List<BaseVO> {
-        onError(errorMessage)
-        return db.tourDao().getAllTours()
-    }
 
     override fun getCountryDetail(name: String): LiveData<CountrVO> {
        return db.countryDao().getCountryDetail(name)
@@ -57,6 +47,16 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
 
     override fun tourDetail(name: String): LiveData<BaseVO> {
         return db.tourDao().getTourDetail(name)
+    }
+
+    //from local storage
+    override fun getToursAndCountries(): LiveData<TourAndCountryVO> {
+       val flowableStream = Flowable.zip(db.tourDao().getAllTours(),db.countryDao().getAllTCountries(),
+           BiFunction<List<BaseVO>,List<BaseVO>,TourAndCountryVO> {
+                   tours , countries -> return@BiFunction TourAndCountryVO(tours,countries)
+
+           })
+        return fromPublisher(flowableStream)
     }
 
 
