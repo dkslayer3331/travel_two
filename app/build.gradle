@@ -87,4 +87,7 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+
+    implementation "androidx.room:room-rxjava2:$room_version"
+
 }

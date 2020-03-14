@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
+import io.reactivex.Observable
 
 /**
  * Created by Moe Htet on 22,February,2020
@@ -13,7 +14,7 @@ import com.mhst.travelassignmenttwo.data.vos.CountrVO
 @Dao
 interface CoyntryDao {
     @Query("select * from countries ")
-    fun getAllTCountries() : List<BaseVO>
+    fun getAllTCountries() : Observable<List<BaseVO>>
 
     @Insert(entity = CountrVO::class)
     fun insertAllCountries(list : List<BaseVO>)

@@ -29,10 +29,9 @@ class MainViewModel : ViewModel(),TourDelegate{
 
     private val disableSwipeRefreshLiveData: MutableLiveData<Unit> = MutableLiveData()
 
-   fun getCombinedList() : Observable<TourAndCountryVO>{
-       return model.combined()
+   fun getCombinedList() : MutableLiveData<TourAndCountryVO>{
+       return model.getDataFromDb()
    }
-
 
     fun getErrorLiveData(): LiveData<String> {
         return errorLiveData
@@ -56,12 +55,8 @@ class MainViewModel : ViewModel(),TourDelegate{
 
     fun onSwipeRefresh(){
         enableSwipeRefreshLiveData.postValue(Unit)
-        model.combined().subscribe({
-            disableSwipeRefreshLiveData.postValue(Unit)
-        },{
-            disableSwipeRefreshLiveData.postValue(Unit)
-            errorLiveData.postValue(it.localizedMessage)
-        })
+        model.combined()
+        disableSwipeRefreshLiveData.postValue(Unit)
     }
 
 

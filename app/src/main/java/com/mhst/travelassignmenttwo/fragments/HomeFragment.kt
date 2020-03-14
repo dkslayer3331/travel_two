@@ -110,10 +110,10 @@ class HomeFragment : Fragment() {
 
         rvTours.adapter = tourAdapter
 
-        viewmodel.getCombinedList().subscribe {
+        viewmodel.getCombinedList().observe(this, Observer {
             countryAdapter.setNewData(it.countries.toMutableList())
             tourAdapter.setNewData(it.tours.toMutableList())
-        }
+        })
 
     }
 
