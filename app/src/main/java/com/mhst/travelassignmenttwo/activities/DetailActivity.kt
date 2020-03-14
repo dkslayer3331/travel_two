@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : BaseActivity() {
 
+
     lateinit var scoreAndReviewAdapter: ReviewAdapter
 
     lateinit var photoAdapter: PhotoAdapter
@@ -97,6 +98,9 @@ class DetailActivity : BaseActivity() {
     }
 
     companion object{
+
+        const val TAG = "DetailActivity"
+
         private const val IE_NAME = "Name"
        private const val IE_TYPE = "Type"  // country -> 1 , tour -> 2
 

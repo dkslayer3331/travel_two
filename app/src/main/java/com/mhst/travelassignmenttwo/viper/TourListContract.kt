@@ -25,14 +25,14 @@ class TourListContract {
     }
 
     interface InterActor {
-        fun getAllNews(onError: (String) -> Unit): LiveData<TourAndCountryVO>
+        fun getAllToursAndCountries(onError: (String) -> Unit): LiveData<TourAndCountryVO>
         fun syncNewsListWithServer()
     }
 
     interface InterActorOutput {
-        fun onNewsListFetchSuccess(countries : List<BaseVO>,tours : List<BaseVO>)
-        fun onNewsListFetchFailure(errorMessage: String)
-        fun onNewsListEmpty()
+        fun onFetchSuccess(countries : List<BaseVO>, tours : List<BaseVO>)
+        fun onFetchail(errorMessage: String)
+        fun onEmpty()
     }
 
 }
