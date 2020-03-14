@@ -44,11 +44,6 @@ class HomeFragment : Fragment() {
 
      lateinit var tourModel: TourModel
 
-    private fun setupRecyclers() {
-        rvTours.adapter = tourAdapter
-        rvCountry.adapter = countryAdapter
-    }
-
     private fun setupSwipeRefresh() {
         swipeRefresh.setOnRefreshListener {
             Log.d("swipe","refreshed")
@@ -83,8 +78,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        setupRecyclers()
-
         viewmodel = ViewModelProviders.of(this)[MainViewModel::class.java]
 
         viewmodel.getNavigateToNewsDetailsLiveData().observe(this, Observer {
@@ -112,6 +105,10 @@ class HomeFragment : Fragment() {
         countryAdapter = CountryAdapter(viewmodel)
 
         tourAdapter = TourAdapter(viewmodel)
+
+        rvCountry.adapter = countryAdapter
+
+        rvTours.adapter = tourAdapter
 
         viewmodel.getCombinedList().subscribe {
             countryAdapter.setNewData(it.countries.toMutableList())

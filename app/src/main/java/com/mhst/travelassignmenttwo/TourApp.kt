@@ -9,9 +9,12 @@ import com.mhst.architectureassignment.data.models.TourModelImpl
  */
 class TourApp : Application() {
 
+    init {
+        context = this
+    }
+
     override fun onCreate() {
         super.onCreate()
-        context = applicationContext
        // TourModelImpl.initModel(applicationContext)
     }
 
