@@ -43,7 +43,6 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
     override fun getCountries(onError: (String) -> Unit): List<BaseVO> {
         onError(errorMessage)
         return db.countryDao().getAllTCountries()
-
     }
 
     override fun getTours(onError: (String) -> Unit): List<BaseVO> {

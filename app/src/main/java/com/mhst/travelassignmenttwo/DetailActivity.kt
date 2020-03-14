@@ -3,6 +3,7 @@ package com.mhst.travelassignmenttwo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.view.menu.MenuPresenter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -79,21 +80,9 @@ class DetailActivity : BaseActivity(),DetailView {
 
         val type = intent.getIntExtra(IE_TYPE,0)
 
-        presenter.onUiReady(this,name,type)
-
-       // data = if(type == 1) tourModel.getCountryDetail("") else model.getTourDetail(id)
-//       if(type == 1){
-//        tourModel.getCountryDetail(name).observe(this, Observer {
-//            bindCountry(it)
-//        })
-//       }
-//        else {
-//           tourModel.tourDetail(name).observe(this, Observer {
-//              bindTour(it)
-//           })
-//       }
-
         setUpRecycler()
+
+        presenter.onUiReady(this,name,type)
 
         idBack.setOnClickListener {
             finish()
@@ -129,10 +118,12 @@ class DetailActivity : BaseActivity(),DetailView {
     }
 
     override fun showDetail(detailObj: BaseVO) {
+        if(detailObj == null) Log.d("empty","tour null")
         bindTour(detailObj)
     }
 
     override fun countryDetail(detailObj: CountrVO) {
+        if(detailObj == null) Log.d("empty","country null")
         bindCountry(detailObj)
     }
 

@@ -16,6 +16,7 @@ import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.architectureassignment.views.viewpods.EmptyViewPod
 import com.mhst.travelassignmenttwo.DetailActivity
 import com.mhst.travelassignmenttwo.R
+import com.mhst.travelassignmenttwo.TourApp
 import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
 import com.mhst.travelassignmenttwo.mvp.presenters.MainPresenter
 import com.mhst.travelassignmenttwo.mvp.presenters.MainPresenterImpl
@@ -77,7 +78,6 @@ class HomeFragment : Fragment() , MainView{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -87,7 +87,7 @@ class HomeFragment : Fragment() , MainView{
 
         presenter.initPresenter(this)
 
-        tourModel = TourModelImpl(context!!)
+        tourModel = TourModelImpl(TourApp.context)
 
         viewPodEmpty = vpEmpty as EmptyViewPod
 
@@ -98,6 +98,8 @@ class HomeFragment : Fragment() , MainView{
         tourAdapter = TourAdapter(presenter)
 
         setupRecyclers()
+
+        presenter.onUiReady(this)
 
     }
 

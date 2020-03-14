@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.mhst.architectureassignment.data.models.TourModel
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.travelassignmenttwo.TourApp
+import com.mhst.travelassignmenttwo.delegates.TourDelegate
 import com.mhst.travelassignmenttwo.mvp.views.MainView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
