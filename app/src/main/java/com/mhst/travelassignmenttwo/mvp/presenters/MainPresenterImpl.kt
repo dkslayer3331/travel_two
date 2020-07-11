@@ -1,5 +1,6 @@
 package com.mhst.travelassignmenttwo.mvp.presenters
 
+import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import com.mhst.architectureassignment.data.models.TourModel
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
@@ -12,9 +13,9 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by Moe Htet on 13,March,2020
  */
-class MainPresenterImpl : MainPresenter, AbstractBasePresenter<MainView>() {
+class MainPresenterImpl(context : Context) : MainPresenter, AbstractBasePresenter<MainView>() {
 
-    private val model: TourModel = TourModelImpl(TourApp.context)
+     var model: TourModel = TourModelImpl(context)
 
     override fun onUiReady(lifecycleOwner: LifecycleOwner) {
         requestAllData(lifecycleOwner)
