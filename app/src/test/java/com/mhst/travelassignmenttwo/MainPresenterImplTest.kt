@@ -60,10 +60,10 @@ class MainPresenterImplTest {
 
         mainPresenter.onUiReady(lifeCycleOwner)
 
-//       verifyAll {
-//           mView.showLoading()
-//           mView.showLists(TourAndCountryVO(listOf(), listOf()))
-//       }
+       verifyAll {
+           mView.showLoading()
+           mView.showLists(TourAndCountryVO(listOf(), listOf()))
+       }
 
     }
 
