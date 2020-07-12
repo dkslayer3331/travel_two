@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import com.mhst.architectureassignment.data.models.TourModel
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
-import com.mhst.travelassignmenttwo.TourApp
-import com.mhst.travelassignmenttwo.delegates.TourDelegate
 import com.mhst.travelassignmenttwo.mvp.views.MainView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -13,9 +11,13 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by Moe Htet on 13,March,2020
  */
-class MainPresenterImpl(context : Context) : MainPresenter, AbstractBasePresenter<MainView>() {
+class MainPresenterImpl() : MainPresenter, AbstractBasePresenter<MainView>() {
 
-     var model: TourModel = TourModelImpl(context)
+    lateinit var model: TourModel
+
+    fun setModel(context: Context){
+        model = TourModelImpl(context)
+    }
 
     override fun onUiReady(lifecycleOwner: LifecycleOwner) {
         requestAllData(lifecycleOwner)

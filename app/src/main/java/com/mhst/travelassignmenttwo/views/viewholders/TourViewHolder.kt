@@ -1,13 +1,13 @@
-package com.mhst.architectureassignment.views.viewholders
+package com.mhst.travelassignmenttwo.views.viewholders
 
 import android.view.TouchDelegate
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.mhst.architectureassignment.data.vos.BaseVO
+import com.mhst.architectureassignment.views.viewholders.BaseViewHolder
 import com.mhst.architectureassignment.views.viewpods.FavViewPod
 import com.mhst.travelassignmenttwo.delegates.TourDelegate
-import kotlinx.android.synthetic.main.rating_viewpod.view.*
 import kotlinx.android.synthetic.main.rv_tour_item.view.*
 
 class TourViewHolder(itemView: View,val delegate: TourDelegate) : BaseViewHolder<BaseVO>(itemView) {

@@ -19,11 +19,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.robolectric.annotation.Config
 
 /**
  * Created by Moe Htet on 11,July,2020
  */
 @RunWith(AndroidJUnit4::class)
+@Config(manifest=Config.NONE)
 class MainPresenterImplTest {
 
     @RelaxedMockK
@@ -37,7 +39,8 @@ class MainPresenterImplTest {
     fun setUp(){
         MockKAnnotations.init(this)
         tourModel = TourModelImpl(ApplicationProvider.getApplicationContext())
-        mainPresenter = MainPresenterImpl(ApplicationProvider.getApplicationContext())
+        mainPresenter = MainPresenterImpl()
+        mainPresenter.setModel(ApplicationProvider.getApplicationContext())
         mainPresenter.initPresenter(mView)
     }
 
@@ -62,6 +65,8 @@ class MainPresenterImplTest {
 
        verifyAll {
            mView.showLoading()
+           tourModel.combined()
+           Thread.sleep(3000)
            mView.showLists(TourAndCountryVO(listOf(), listOf()))
        }
 
