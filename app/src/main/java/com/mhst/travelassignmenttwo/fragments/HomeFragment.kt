@@ -20,6 +20,8 @@ import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
 import com.mhst.travelassignmenttwo.mvp.presenters.MainPresenter
 import com.mhst.travelassignmenttwo.mvp.presenters.MainPresenterImpl
 import com.mhst.travelassignmenttwo.mvp.views.MainView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -86,7 +88,7 @@ class HomeFragment : Fragment() , MainView{
 
         presenter.initPresenter(this)
 
-        (presenter as MainPresenterImpl).setModel(TourApp.context)
+        (presenter as MainPresenterImpl).setUp(TourApp.context,Schedulers.io(),AndroidSchedulers.mainThread())
 
         tourModel = TourModelImpl(TourApp.context)
 

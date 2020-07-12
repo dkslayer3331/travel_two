@@ -6,6 +6,8 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mhst.architectureassignment.data.models.TourModel
+import com.mhst.architectureassignment.data.vos.BaseVO
+import com.mhst.architectureassignment.data.vos.ScoreAndReviewVO
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
 import com.mhst.travelassignmenttwo.mvp.presenters.MainPresenterImpl
@@ -14,12 +16,15 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
 import io.mockk.verifyAll
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.*
 import org.robolectric.annotation.Config
+
 
 /**
  * Created by Moe Htet on 11,July,2020
@@ -31,17 +36,33 @@ class MainPresenterImplTest {
     @RelaxedMockK
     lateinit var mView : MainView
 
-    lateinit var mainPresenter: MainPresenterImpl
+    private lateinit var mainPresenter: MainPresenterImpl
 
-    lateinit var tourModel : TourModel
+    private lateinit var tourModel : TourModel
+
+    lateinit var testScheduler : Scheduler
+
+    private val dummyList = mutableListOf<BaseVO>()
+    private val reviewList = listOf(
+        ScoreAndReviewVO("Name",4.5,5,10),
+        ScoreAndReviewVO("Name",4.5,5,10),
+        ScoreAndReviewVO("Name",4.5,5,10)
+    )
 
     @Before
     fun setUp(){
         MockKAnnotations.init(this)
-        tourModel = TourModelImpl(ApplicationProvider.getApplicationContext())
+       testScheduler = TestScheduler()
+     //   tourModel = TourModelImpl(ApplicationProvider.getApplicationContext())
         mainPresenter = MainPresenterImpl()
-        mainPresenter.setModel(ApplicationProvider.getApplicationContext())
+        mainPresenter.setUp(ApplicationProvider.getApplicationContext(),testScheduler,testScheduler)
         mainPresenter.initPresenter(mView)
+        mainPresenter.model.combined()
+        for(i in 1..4){
+            dummyList.add(
+                BaseVO("name one","this is descritopn","yangon",
+                    4.5f,reviewList))
+        }
     }
 
     @Test
@@ -54,8 +75,19 @@ class MainPresenterImplTest {
         }
     }
 
+//    fun loadData(){
+//        tourModel.combined().subscribeOn(testScheduler).observeOn(testScheduler)
+//            .subscribe {
+//                if(it.countries.isEmpty() && it.tours.isEmpty()) mView.displayEmptyView()
+//                else {
+//                    mView.showLists(it)
+//                }
+//            }
+//    }
+
     @Test
     fun onUIReady_callDisplayList(){
+        tourModel = mock(TourModel::class.java)
         val lifeCycleOwner = mock(LifecycleOwner::class.java)
         val lifeCycleRegistry = LifecycleRegistry(lifeCycleOwner)
         lifeCycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -63,11 +95,15 @@ class MainPresenterImplTest {
 
         mainPresenter.onUiReady(lifeCycleOwner)
 
-       verifyAll {
-           mView.showLoading()
-           tourModel.combined()
-           Thread.sleep(3000)
-           mView.showLists(TourAndCountryVO(listOf(), listOf()))
+       verify{
+          // mView.showLoading()
+           tourModel.combined().subscribeOn(testScheduler).observeOn(testScheduler)
+               .subscribe {
+                   if(it.countries.isEmpty() && it.tours.isEmpty()) mView.displayEmptyView()
+                   else {
+                       mView.showLists(it)
+                   }
+               }
        }
 
     }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -29,6 +30,11 @@ class GoToCountryDetailTest {
     @Before
     fun setUp(){
         activityTestRule.launchActivity(Intent())
+    }
+
+    @Test
+    fun swipeRefreshTest(){
+        onView(withId(R.id.swipeRefresh)).perform(swipeDown())
     }
 
     @Test

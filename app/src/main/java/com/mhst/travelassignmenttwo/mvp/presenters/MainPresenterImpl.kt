@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.mhst.architectureassignment.data.models.TourModel
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.travelassignmenttwo.mvp.views.MainView
+import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -15,8 +16,14 @@ class MainPresenterImpl() : MainPresenter, AbstractBasePresenter<MainView>() {
 
     lateinit var model: TourModel
 
-    fun setModel(context: Context){
+    lateinit var schedulers: Scheduler
+
+    lateinit var androidSchedulers: Scheduler
+
+    fun setUp(context: Context,scheduler: Scheduler,androidScheduler : Scheduler){
         model = TourModelImpl(context)
+        schedulers = scheduler
+        androidSchedulers = androidScheduler
     }
 
     override fun onUiReady(lifecycleOwner: LifecycleOwner) {
@@ -34,8 +41,8 @@ class MainPresenterImpl() : MainPresenter, AbstractBasePresenter<MainView>() {
     private fun requestAllData(lifecycleOwner: LifecycleOwner) {
         mView?.showLoading()
         model.combined()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulers)
+            .observeOn(androidSchedulers)
             .doOnError { mView?.showErrorMessage(it.localizedMessage) }
             .subscribe {
                 mView?.hideLoading()
