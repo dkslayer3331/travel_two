@@ -30,7 +30,7 @@ class MainPresenterImpl() : MainPresenter, AbstractBasePresenter<MainView>() {
         requestAllData(lifecycleOwner)
     }
 
-    override fun onSwipeRrfresh(lifecycleOwner: LifecycleOwner) {
+    override fun onSwipeRefresh(lifecycleOwner: LifecycleOwner) {
         requestAllData(lifecycleOwner)
     }
 

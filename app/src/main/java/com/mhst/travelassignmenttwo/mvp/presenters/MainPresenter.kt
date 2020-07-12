@@ -9,5 +9,5 @@ import com.mhst.travelassignmenttwo.mvp.views.MainView
  */
 interface MainPresenter : BasePresenter<MainView>,TourDelegate{
     fun onUiReady(lifecycleOwner: LifecycleOwner)
-    fun onSwipeRrfresh(lifecycleOwner: LifecycleOwner)
+    fun onSwipeRefresh(lifecycleOwner: LifecycleOwner)
 }

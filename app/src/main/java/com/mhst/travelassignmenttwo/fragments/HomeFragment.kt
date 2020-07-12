@@ -51,7 +51,7 @@ class HomeFragment : Fragment() , MainView{
 
     private fun setupSwipeRefresh() {
         swipeRefresh.setOnRefreshListener {
-            presenter.onSwipeRrfresh(this)
+            presenter.onSwipeRefresh(this)
         }
     }
 

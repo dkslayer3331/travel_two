@@ -23,6 +23,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoJUnitRunner
 import org.robolectric.annotation.Config
 
 
@@ -40,7 +42,7 @@ class MainPresenterImplTest {
 
     private lateinit var tourModel : TourModel
 
-    lateinit var testScheduler : Scheduler
+    lateinit var testScheduler : TestScheduler
 
     private val dummyList = mutableListOf<BaseVO>()
     private val reviewList = listOf(
@@ -53,14 +55,14 @@ class MainPresenterImplTest {
     fun setUp(){
         MockKAnnotations.init(this)
        testScheduler = TestScheduler()
+        mView = mock(MainView::class.java)
      //   tourModel = TourModelImpl(ApplicationProvider.getApplicationContext())
         mainPresenter = MainPresenterImpl()
         mainPresenter.setUp(ApplicationProvider.getApplicationContext(),testScheduler,testScheduler)
         mainPresenter.initPresenter(mView)
-        mainPresenter.model.combined()
         for(i in 1..4){
             dummyList.add(
-                BaseVO("name one","this is descritopn","yangon",
+                BaseVO("name one","this is description","yangon",
                     4.5f,reviewList))
         }
     }
@@ -75,36 +77,40 @@ class MainPresenterImplTest {
         }
     }
 
-//    fun loadData(){
-//        tourModel.combined().subscribeOn(testScheduler).observeOn(testScheduler)
-//            .subscribe {
-//                if(it.countries.isEmpty() && it.tours.isEmpty()) mView.displayEmptyView()
-//                else {
-//                    mView.showLists(it)
-//                }
-//            }
-//    }
+    @Test
+    fun loadDataTest(){
+        tourModel.combined().subscribeOn(testScheduler).observeOn(testScheduler)
+            .subscribe {
+                if(it.countries.isEmpty() && it.tours.isEmpty()) mView.displayEmptyView()
+                else {
+                    mView.showLists(it)
+                }
+            }
+    }
 
     @Test
     fun onUIReady_callDisplayList(){
+
+        val mockedResponse = TourAndCountryVO(dummyList,dummyList)
+
         tourModel = mock(TourModel::class.java)
+
         val lifeCycleOwner = mock(LifecycleOwner::class.java)
         val lifeCycleRegistry = LifecycleRegistry(lifeCycleOwner)
         lifeCycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         `when`(lifeCycleOwner.lifecycle).thenReturn(lifeCycleRegistry)
 
-        mainPresenter.onUiReady(lifeCycleOwner)
+        doReturn(Observable.just(mockedResponse))
+            .`when`(tourModel)
+            .combined()
 
-       verify{
-          // mView.showLoading()
-           tourModel.combined().subscribeOn(testScheduler).observeOn(testScheduler)
-               .subscribe {
-                   if(it.countries.isEmpty() && it.tours.isEmpty()) mView.displayEmptyView()
-                   else {
-                       mView.showLists(it)
-                   }
-               }
-       }
+        mainPresenter.onUiReady(lifeCycleOwner)
+        testScheduler.triggerActions()
+
+        //mainPresenter.onUiReady(lifeCycleOwner)
+
+        verify(mView).showLoading()
+        verify(mView).showLists(TourAndCountryVO(dummyList,dummyList))
 
     }
 
