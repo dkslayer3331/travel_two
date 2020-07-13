@@ -4,14 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.view.menu.MenuPresenter
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.mhst.architectureassignment.adapters.PhotoAdapter
 import com.mhst.architectureassignment.adapters.ReviewAdapter
-import com.mhst.architectureassignment.data.models.TourModel
-import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
 import com.mhst.travelassignmenttwo.mvp.presenters.DetailPresenter
@@ -21,16 +17,17 @@ import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : BaseActivity(),DetailView {
 
-    lateinit var scoreAndReviewAdapter: ReviewAdapter
+    private lateinit var scoreAndReviewAdapter: ReviewAdapter
 
-    lateinit var photoAdapter: PhotoAdapter
+    private lateinit var photoAdapter: PhotoAdapter
 
-    lateinit var presenter: DetailPresenter
+    private lateinit var presenter: DetailPresenter
 
     var data = BaseVO()
 
     private fun setupPresenter(){
         presenter = ViewModelProviders.of(this).get(DetailPresenterImpl::class.java)
+        presenter.setUp(TourApp.context)
         presenter.initPresenter(this)
     }
 

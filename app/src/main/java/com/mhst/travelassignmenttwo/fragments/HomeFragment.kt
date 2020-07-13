@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.mhst.architectureassignment.adapters.CountryAdapter
 import com.mhst.travelassignmenttwo.adapters.TourAdapter
-import com.mhst.architectureassignment.data.models.TourModel
+import com.mhst.travelassignmenttwo.data.models.TourModel
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.architectureassignment.views.viewpods.EmptyViewPod
 import com.mhst.travelassignmenttwo.DetailActivity

@@ -4,15 +4,13 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mhst.architectureassignment.data.models.BaseModel
-import com.mhst.architectureassignment.data.models.TourModel
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.architectureassignment.network.responses.ResponseVO
 import com.mhst.travelassignmenttwo.data.vos.CountrVO
 import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
 import com.mhst.travelassignmenttwo.persistance.dbs.TourDb
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
@@ -22,7 +20,7 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
 
     var list = MutableLiveData<TourAndCountryVO>()
 
-    override fun combined(): Observable<TourAndCountryVO> {
+    override fun combined(scheduler: Scheduler): Observable<TourAndCountryVO> {
         Log.d("combine","combine is called")
      return Observable.zip(travelApi!!.getAllTours(),travelApi!!.getAllCountries(),
            BiFunction<ResponseVO,ResponseVO,TourAndCountryVO>{ tours : ResponseVO, countries : ResponseVO ->
@@ -34,8 +32,7 @@ class TourModelImpl(context: Context) : TourModel, BaseModel() {
                val countries = db.countryDao().getAllTCountries()
                val tours = db.tourDao().getAllTours()
                return@BiFunction TourAndCountryVO(countries,tours)
-           }).subscribeOn(Schedulers.io())
-           .observeOn(AndroidSchedulers.mainThread())
+           }).subscribeOn(scheduler)
     }
 
     private val db = TourDb.getInstance(context)

@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mhst.architectureassignment.data.models.TourModel
+import com.mhst.travelassignmenttwo.data.models.TourModel
 import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.architectureassignment.data.vos.ScoreAndReviewVO
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
@@ -13,18 +13,17 @@ import com.mhst.travelassignmenttwo.data.vos.TourAndCountryVO
 import com.mhst.travelassignmenttwo.mvp.presenters.MainPresenterImpl
 import com.mhst.travelassignmenttwo.mvp.views.MainView
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
 import io.mockk.verifyAll
 import io.reactivex.Observable
-import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
-import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoJUnitRunner
 import org.robolectric.annotation.Config
 
 
@@ -42,7 +41,8 @@ class MainPresenterImplTest {
 
     private lateinit var tourModel : TourModel
 
-    lateinit var testScheduler : TestScheduler
+   lateinit var testScheduler : TestScheduler
+    //val testScheduler = Schedulers.trampoline()
 
     private val dummyList = mutableListOf<BaseVO>()
     private val reviewList = listOf(
@@ -77,9 +77,11 @@ class MainPresenterImplTest {
         }
     }
 
+    ///test for model
     @Test
     fun loadDataTest(){
-        tourModel.combined().subscribeOn(testScheduler).observeOn(testScheduler)
+        tourModel = TourModelImpl(ApplicationProvider.getApplicationContext())
+        tourModel.combined(testScheduler).subscribeOn(testScheduler).observeOn(testScheduler)
             .subscribe {
                 if(it.countries.isEmpty() && it.tours.isEmpty()) mView.displayEmptyView()
                 else {
@@ -102,16 +104,16 @@ class MainPresenterImplTest {
 
         doReturn(Observable.just(mockedResponse))
             .`when`(tourModel)
-            .combined()
+            .combined(testScheduler)
 
         mainPresenter.onUiReady(lifeCycleOwner)
+
         testScheduler.triggerActions()
 
-        //mainPresenter.onUiReady(lifeCycleOwner)
-
         verify(mView).showLoading()
-        verify(mView).showLists(TourAndCountryVO(dummyList,dummyList))
+        verify(mView).showLists(mockedResponse)
 
     }
+
 
 }

@@ -1,6 +1,5 @@
-package com.mhst.architectureassignment.data.models
+package com.mhst.travelassignmenttwo.data.models
 
-import android.content.Context
 import com.mhst.travelassignmenttwo.BASE_URL
 import com.mhst.travelassignmenttwo.network.TravelApi
 import okhttp3.OkHttpClient

@@ -2,12 +2,10 @@ package com.mhst.travelassignmenttwo.mvp.presenters
 
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
-import com.mhst.architectureassignment.data.models.TourModel
+import com.mhst.travelassignmenttwo.data.models.TourModel
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
 import com.mhst.travelassignmenttwo.mvp.views.MainView
 import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Moe Htet on 13,March,2020
@@ -40,7 +38,7 @@ class MainPresenterImpl() : MainPresenter, AbstractBasePresenter<MainView>() {
 
     private fun requestAllData(lifecycleOwner: LifecycleOwner) {
         mView?.showLoading()
-        model.combined()
+        model.combined(schedulers)
             .subscribeOn(schedulers)
             .observeOn(androidSchedulers)
             .doOnError { mView?.showErrorMessage(it.localizedMessage) }

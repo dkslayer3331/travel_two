@@ -24,13 +24,14 @@ abstract class TourDb : RoomDatabase(){
     abstract fun countryDao() : CoyntryDao
 
     companion object{
-        val DB_NAME = "TOURS_AND_COUNTRIES.DB"
+        const val DB_NAME = "TOURS_AND_COUNTRIES.DB"
         var dbInstance : TourDb? = null
         fun getInstance(context: Context) : TourDb{
             when(dbInstance){
                 null -> {
                     dbInstance = Room.databaseBuilder(context,TourDb::class.java, DB_NAME)
                         .fallbackToDestructiveMigration()
+                        .allowMainThreadQueries()
                         .build()
                 }
             }
