@@ -9,6 +9,7 @@ import com.mhst.architectureassignment.data.vos.BaseVO
 import com.mhst.architectureassignment.data.vos.ScoreAndReviewVO
 import com.mhst.travelassignmenttwo.data.models.TourModel
 import com.mhst.travelassignmenttwo.data.models.TourModelImpl
+import com.mhst.travelassignmenttwo.data.vos.CountrVO
 import com.mhst.travelassignmenttwo.mvp.presenters.DetailPresenterImpl
 import com.mhst.travelassignmenttwo.mvp.views.DetailView
 import com.mhst.travelassignmenttwo.mvp.views.MainView
@@ -33,22 +34,30 @@ class DetailPresenterImplTest {
     @RelaxedMockK
     lateinit var mView : DetailView
 
-    lateinit var tourModel: TourModel
+   // lateinit var tourModel: TourModel
 
     lateinit var detailPresenterImpl: DetailPresenterImpl
 
     lateinit var baseVO: BaseVO
 
-    @Before
-    fun setUp(){
-        MockKAnnotations.init()
-        mView = mock(DetailView::class.java)
-        detailPresenterImpl = DetailPresenterImpl()
-        detailPresenterImpl.setUp(ApplicationProvider.getApplicationContext())
-        tourModel = TourModelImpl(ApplicationProvider.getApplicationContext())
+    lateinit var countryVO : CountrVO
+
+    fun prepareDummyDatas(){
         val scoreAndReviewVO = ScoreAndReviewVO("Name",4.5,5,10)
         baseVO =  BaseVO("name one","this is description","yangon",
             4.5f, listOf(scoreAndReviewVO))
+        countryVO = CountrVO(1,"myanmar","this is desc","da world",
+            5f, listOf(scoreAndReviewVO), listOf("img1","img2"))
+    }
+
+    @Before
+    fun setUp(){
+        MockKAnnotations.init(this)
+        mView = mock(DetailView::class.java)
+        detailPresenterImpl = DetailPresenterImpl()
+        detailPresenterImpl.setUp(ApplicationProvider.getApplicationContext())
+        detailPresenterImpl.initPresenter(mView)
+        prepareDummyDatas()
     }
 
     @Test
@@ -58,10 +67,11 @@ class DetailPresenterImplTest {
         lifeCycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         Mockito.`when`(lifecycleOwner.lifecycle).thenReturn(lifeCycleRegistry)
 
-       detailPresenterImpl.onUiReady(lifecycleOwner,"Dummy One",1)
+       detailPresenterImpl.onUiReady(lifecycleOwner,countryVO.name,1)
 
         verify {
-            mView.showDetail(baseVO)
+            //mView.showLoading(  )
+            mView.countryDetail(countryVO)
         }
     }
 
